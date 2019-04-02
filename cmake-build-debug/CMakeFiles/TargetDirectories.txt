@@ -1,0 +1,3 @@
+/home/hagairaja/Documents/GrafKom/grafika-opengl-showcase/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/hagairaja/Documents/GrafKom/grafika-opengl-showcase/cmake-build-debug/CMakeFiles/grafika-opengl-showcase.dir
+/home/hagairaja/Documents/GrafKom/grafika-opengl-showcase/cmake-build-debug/CMakeFiles/edit_cache.dir

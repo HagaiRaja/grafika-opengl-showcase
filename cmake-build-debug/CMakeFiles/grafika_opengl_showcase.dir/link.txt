@@ -1,0 +1,1 @@
+/usr/bin/c++  -g   CMakeFiles/grafika_opengl_showcase.dir/main.cpp.o  -o grafika_opengl_showcase 

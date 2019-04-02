@@ -1,0 +1,1 @@
+const char * logl_root = "/home/hagairaja/Documents/GrafKom/grafika-opengl-showcase";

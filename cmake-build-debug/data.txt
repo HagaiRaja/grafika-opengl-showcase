@@ -1,0 +1,25 @@
+# body tengah #
+4.0 6.0 1.0
+0.0 0.0 0.0
+255 0 0
+
+9999 9999 9999
+
+# body antara depan dan tengah #
+1.0 1.0 1.0
+5.0 5.0 5.0
+0 255 0
+
+99999 99999 99999
+
+#end of line
+
+aturan penulisan :
+baris pertama itu faktor scaling
+scaler_X scaler_Y scaler_Z
+
+baris kedua itu titik pusat
+pos_X pos_Y pos_Z
+
+baris ketiga itu titik RGB Color
+R G B
