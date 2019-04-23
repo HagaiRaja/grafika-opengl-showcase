@@ -1,5 +1,5 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/grafika-opengl-showcase.dir/main.cpp.o"
+  "CMakeFiles/grafika-opengl-showcase.dir/lightning_sample.cpp.o"
   "CMakeFiles/grafika-opengl-showcase.dir/glad.c.o"
   "grafika-opengl-showcase.pdb"
   "grafika-opengl-showcase"

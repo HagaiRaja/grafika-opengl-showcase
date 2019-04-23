@@ -6,6 +6,16 @@
 
 #IncludeRegexTransform: 
 
+/home/hagairaja/Documents/GrafKom/grafika-opengl-showcase/learnopengl/camera.h
+glad/glad.h
+-
+glm/glm.hpp
+-
+glm/gtc/matrix_transform.hpp
+-
+vector
+-
+
 /home/hagairaja/Documents/GrafKom/grafika-opengl-showcase/learnopengl/filesystem.h
 string
 -
@@ -30,7 +40,7 @@ sstream
 iostream
 -
 
-/home/hagairaja/Documents/GrafKom/grafika-opengl-showcase/main.cpp
+/home/hagairaja/Documents/GrafKom/grafika-opengl-showcase/lightning_sample.cpp
 glad/glad.h
 -
 GLFW/glfw3.h
@@ -45,6 +55,8 @@ glm/gtc/type_ptr.hpp
 -
 learnopengl/shader_m.h
 /home/hagairaja/Documents/GrafKom/grafika-opengl-showcase/learnopengl/shader_m.h
+learnopengl/camera.h
+/home/hagairaja/Documents/GrafKom/grafika-opengl-showcase/learnopengl/camera.h
 learnopengl/filesystem.h
 /home/hagairaja/Documents/GrafKom/grafika-opengl-showcase/learnopengl/filesystem.h
 stb_image.h

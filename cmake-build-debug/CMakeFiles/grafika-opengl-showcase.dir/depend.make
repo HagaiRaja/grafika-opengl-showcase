@@ -3,8 +3,9 @@
 
 CMakeFiles/grafika-opengl-showcase.dir/glad.c.o: ../glad.c
 
-CMakeFiles/grafika-opengl-showcase.dir/main.cpp.o: ../learnopengl/filesystem.h
-CMakeFiles/grafika-opengl-showcase.dir/main.cpp.o: ../learnopengl/root_directory.h
-CMakeFiles/grafika-opengl-showcase.dir/main.cpp.o: ../learnopengl/shader_m.h
-CMakeFiles/grafika-opengl-showcase.dir/main.cpp.o: ../main.cpp
+CMakeFiles/grafika-opengl-showcase.dir/lightning_sample.cpp.o: ../learnopengl/camera.h
+CMakeFiles/grafika-opengl-showcase.dir/lightning_sample.cpp.o: ../learnopengl/filesystem.h
+CMakeFiles/grafika-opengl-showcase.dir/lightning_sample.cpp.o: ../learnopengl/root_directory.h
+CMakeFiles/grafika-opengl-showcase.dir/lightning_sample.cpp.o: ../learnopengl/shader_m.h
+CMakeFiles/grafika-opengl-showcase.dir/lightning_sample.cpp.o: ../lightning_sample.cpp
 

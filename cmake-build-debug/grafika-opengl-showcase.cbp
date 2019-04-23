@@ -87,7 +87,7 @@
 		<Unit filename="/home/hagairaja/Documents/GrafKom/grafika-opengl-showcase/glad.c">
 			<Option target="grafika-opengl-showcase"/>
 		</Unit>
-		<Unit filename="/home/hagairaja/Documents/GrafKom/grafika-opengl-showcase/main.cpp">
+		<Unit filename="/home/hagairaja/Documents/GrafKom/grafika-opengl-showcase/lightning_sample.cpp">
 			<Option target="grafika-opengl-showcase"/>
 		</Unit>
 		<Unit filename="/home/hagairaja/Documents/GrafKom/grafika-opengl-showcase/CMakeLists.txt">

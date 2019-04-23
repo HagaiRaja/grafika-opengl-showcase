@@ -150,32 +150,32 @@ glad.c.s:
 	$(MAKE) -f CMakeFiles/grafika-opengl-showcase.dir/build.make CMakeFiles/grafika-opengl-showcase.dir/glad.c.s
 .PHONY : glad.c.s
 
-main.o: main.cpp.o
+lightning_sample.o: lightning_sample.cpp.o
 
-.PHONY : main.o
+.PHONY : lightning_sample.o
 
 # target to build an object file
-main.cpp.o:
-	$(MAKE) -f CMakeFiles/grafika-opengl-showcase.dir/build.make CMakeFiles/grafika-opengl-showcase.dir/main.cpp.o
-.PHONY : main.cpp.o
+lightning_sample.cpp.o:
+	$(MAKE) -f CMakeFiles/grafika-opengl-showcase.dir/build.make CMakeFiles/grafika-opengl-showcase.dir/lightning_sample.cpp.o
+.PHONY : lightning_sample.cpp.o
 
-main.i: main.cpp.i
+lightning_sample.i: lightning_sample.cpp.i
 
-.PHONY : main.i
+.PHONY : lightning_sample.i
 
 # target to preprocess a source file
-main.cpp.i:
-	$(MAKE) -f CMakeFiles/grafika-opengl-showcase.dir/build.make CMakeFiles/grafika-opengl-showcase.dir/main.cpp.i
-.PHONY : main.cpp.i
+lightning_sample.cpp.i:
+	$(MAKE) -f CMakeFiles/grafika-opengl-showcase.dir/build.make CMakeFiles/grafika-opengl-showcase.dir/lightning_sample.cpp.i
+.PHONY : lightning_sample.cpp.i
 
-main.s: main.cpp.s
+lightning_sample.s: lightning_sample.cpp.s
 
-.PHONY : main.s
+.PHONY : lightning_sample.s
 
 # target to generate assembly for a file
-main.cpp.s:
-	$(MAKE) -f CMakeFiles/grafika-opengl-showcase.dir/build.make CMakeFiles/grafika-opengl-showcase.dir/main.cpp.s
-.PHONY : main.cpp.s
+lightning_sample.cpp.s:
+	$(MAKE) -f CMakeFiles/grafika-opengl-showcase.dir/build.make CMakeFiles/grafika-opengl-showcase.dir/lightning_sample.cpp.s
+.PHONY : lightning_sample.cpp.s
 
 # Help Target
 help:
@@ -189,9 +189,9 @@ help:
 	@echo "... glad.o"
 	@echo "... glad.i"
 	@echo "... glad.s"
-	@echo "... main.o"
-	@echo "... main.i"
-	@echo "... main.s"
+	@echo "... lightning_sample.o"
+	@echo "... lightning_sample.i"
+	@echo "... lightning_sample.s"
 .PHONY : help
 
 

@@ -1,1 +1,1 @@
-/usr/bin/c++  -g   CMakeFiles/grafika-opengl-showcase.dir/main.cpp.o CMakeFiles/grafika-opengl-showcase.dir/glad.c.o  -o grafika-opengl-showcase -lGLU -lglfw3 -lX11 -lXxf86vm -lXrandr -lpthread -lXi -ldl -lXinerama -lXcursor -lassimp --enable-nuklear 
+/usr/bin/c++  -g   CMakeFiles/grafika-opengl-showcase.dir/lightning_sample.cpp.o CMakeFiles/grafika-opengl-showcase.dir/glad.c.o  -o grafika-opengl-showcase -lGLU -lglfw3 -lX11 -lXxf86vm -lXrandr -lpthread -lXi -ldl -lXinerama -lXcursor -lassimp --enable-nuklear 

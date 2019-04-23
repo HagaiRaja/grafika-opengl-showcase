@@ -90,48 +90,46 @@ int main()
     // build and compile our shader zprogram
     // ------------------------------------
     Shader ourShader("7.1.camera.vs", "7.1.camera.fs");
-    Shader lightingShader("2.2.basic_lighting.vs", "2.2.basic_lighting.fs");
-    Shader lampShader("2.2.lamp.vs", "2.2.lamp.fs");
 
     // set up vertex data (and buffer(s)) and configure vertex attributes
     // ------------------------------------------------------------------
     float vertices[] = {
-            -0.5f, -0.5f, -1.0f,  0.0f, 0.0f, 0.0f,  0.0f, -1.0f,
-            0.5f, -0.5f, -1.0f,  1.0f, 0.0f, 0.0f,  0.0f, -1.0f,
-            0.5f,  0.5f, -1.0f,  1.0f, 1.0f, 0.0f,  0.0f, -1.0f,
-            0.5f,  0.5f, -1.0f,  1.0f, 1.0f, 0.0f,  0.0f, -1.0f,
-            -0.5f,  0.5f, -1.0f,  0.0f, 1.0f, 0.0f,  0.0f, -1.0f,
-            -0.5f, -0.5f, -1.0f,  0.0f, 0.0f, 0.0f,  0.0f, -1.0f,
+            -0.5f, -0.5f, -1.0f,  0.0f, 0.0f,
+            0.5f, -0.5f, -1.0f,  1.0f, 0.0f,
+            0.5f,  0.5f, -1.0f,  1.0f, 1.0f,
+            0.5f,  0.5f, -1.0f,  1.0f, 1.0f,
+            -0.5f,  0.5f, -1.0f,  0.0f, 1.0f,
+            -0.5f, -0.5f, -1.0f,  0.0f, 0.0f,
 
-            -0.5f, -0.5f,  1.0f,  0.0f, 0.0f, 0.0f,  0.0f,  1.0f,
-            0.5f, -0.5f,  1.0f,  1.0f, 0.0f, 0.0f,  0.0f,  1.0f,
-            0.5f,  0.5f,  1.0f,  1.0f, 1.0f, 0.0f,  0.0f,  1.0f,
-            0.5f,  0.5f,  1.0f,  1.0f, 1.0f, 0.0f,  0.0f,  1.0f,
-            -0.5f,  0.5f,  1.0f,  0.0f, 1.0f, 0.0f,  0.0f,  1.0f,
-            -0.5f, -0.5f,  1.0f,  0.0f, 0.0f, 0.0f,  0.0f,  1.0f,
+            -0.5f, -0.5f,  1.0f,  0.0f, 0.0f,
+            0.5f, -0.5f,  1.0f,  1.0f, 0.0f,
+            0.5f,  0.5f,  1.0f,  1.0f, 1.0f,
+            0.5f,  0.5f,  1.0f,  1.0f, 1.0f,
+            -0.5f,  0.5f,  1.0f,  0.0f, 1.0f,
+            -0.5f, -0.5f,  1.0f,  0.0f, 0.0f,
 
-            -0.5f,  0.5f,  1.0f,  1.0f, 0.0f, -1.0f,  0.0f,  0.0f,
-            -0.5f,  0.5f, -1.0f,  1.0f, 1.0f, -1.0f,  0.0f,  0.0f,
-            -0.5f, -0.5f, -1.0f,  0.0f, 1.0f, -1.0f,  0.0f,  0.0f,
-            -0.5f, -0.5f, -1.0f,  0.0f, 1.0f, -1.0f,  0.0f,  0.0f,
-            -0.5f, -0.5f,  1.0f,  0.0f, 0.0f, -1.0f,  0.0f,  0.0f,
-            -0.5f,  0.5f,  1.0f,  1.0f, 0.0f, -1.0f,  0.0f,  0.0f,
+            -0.5f,  0.5f,  1.0f,  1.0f, 0.0f,
+            -0.5f,  0.5f, -1.0f,  1.0f, 1.0f,
+            -0.5f, -0.5f, -1.0f,  0.0f, 1.0f,
+            -0.5f, -0.5f, -1.0f,  0.0f, 1.0f,
+            -0.5f, -0.5f,  1.0f,  0.0f, 0.0f,
+            -0.5f,  0.5f,  1.0f,  1.0f, 0.0f,
 
-            0.5f,  0.5f,  1.0f,  1.0f, 0.0f, 1.0f,  0.0f,  0.0f,
-            0.5f,  0.5f, -1.0f,  1.0f, 1.0f, 1.0f,  0.0f,  0.0f,
-            0.5f, -0.5f, -1.0f,  0.0f, 1.0f, 1.0f,  0.0f,  0.0f,
-            0.5f, -0.5f, -1.0f,  0.0f, 1.0f, 1.0f,  0.0f,  0.0f,
-            0.5f, -0.5f,  1.0f,  0.0f, 0.0f, 1.0f,  0.0f,  0.0f,
-            0.5f,  0.5f,  1.0f,  1.0f, 0.0f, 1.0f,  0.0f,  0.0f,
+            0.5f,  0.5f,  1.0f,  1.0f, 0.0f,
+            0.5f,  0.5f, -1.0f,  1.0f, 1.0f,
+            0.5f, -0.5f, -1.0f,  0.0f, 1.0f,
+            0.5f, -0.5f, -1.0f,  0.0f, 1.0f,
+            0.5f, -0.5f,  1.0f,  0.0f, 0.0f,
+            0.5f,  0.5f,  1.0f,  1.0f, 0.0f,
 
-            -0.5f, -0.5f, -1.0f,  0.0f, 1.0f, 0.0f, -1.0f,  0.0f,
-            0.5f, -0.5f, -1.0f,  1.0f, 1.0f, 0.0f, -1.0f,  0.0f,
-            0.5f, -0.5f,  1.0f,  1.0f, 0.0f, 0.0f, -1.0f,  0.0f,
-            0.5f, -0.5f,  1.0f,  1.0f, 0.0f, 0.0f, -1.0f,  0.0f,
-            -0.5f, -0.5f,  1.0f,  0.0f, 0.0f, 0.0f, -1.0f,  0.0f,
-            -0.5f, -0.5f, -1.0f,  0.0f, 1.0f, 0.0f, -1.0f,  0.0f,
+            -0.5f, -0.5f, -1.0f,  0.0f, 1.0f,
+            0.5f, -0.5f, -1.0f,  1.0f, 1.0f,
+            0.5f, -0.5f,  1.0f,  1.0f, 0.0f,
+            0.5f, -0.5f,  1.0f,  1.0f, 0.0f,
+            -0.5f, -0.5f,  1.0f,  0.0f, 0.0f,
+            -0.5f, -0.5f, -1.0f,  0.0f, 1.0f,
 
-            -0.5f,  0.5f, -1.0f,  0.0f, 1.0f,v
+            -0.5f,  0.5f, -1.0f,  0.0f, 1.0f,
             0.5f,  0.5f, -1.0f,  1.0f, 1.0f,
             0.5f,  0.5f,  1.0f,  1.0f, 0.0f,
             0.5f,  0.5f,  1.0f,  1.0f, 0.0f,
@@ -144,7 +142,6 @@ int main()
     vector<glm::vec3> scaler;
     vector<glm::vec3> position;
     vector<glm::vec3> color;
-    vector<int> objectTexture;
 
     ifstream imageFile;
     imageFile.open("data.txt", ios::in);
@@ -175,10 +172,6 @@ int main()
             G = ((float) temp_g)/255;
             B = ((float) temp_b)/255;
             color.push_back(glm::vec3(R, G, B));
-
-            int textureInt;
-            imageFile >> textureInt;
-            objectTexture.push_back(textureInt);
 
             imageFile >> now.x >> now.y >> now.z;
             count++;
@@ -220,15 +213,6 @@ int main()
         iterate++;
     }
 
-    // world color of our cubes
-    int cubeTexture[objectTexture.size()];
-
-    iterate = 0;
-    for (std::vector<int>::const_iterator is = objectTexture.begin(); is != objectTexture.end(); ++is) {
-        cubeTexture[iterate] = *is;
-        iterate++;
-    }
-
     cout << position.size() << endl;
     cout << scaler.size() << endl;
     cout << color.size() << endl;
@@ -257,111 +241,43 @@ int main()
 
     // load and create a texture
     // -------------------------
-    unsigned int texture1, texture2, texture3;
-    // texture 1
-    // ---------
-    glGenTextures(1, &texture1);
-    glBindTexture(GL_TEXTURE_2D, texture1);
-    // set the texture wrapping parameters
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    // set texture filtering parameters
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    // load image, create texture and generate mipmaps
-    int width, height, nrChannels;
-    stbi_set_flip_vertically_on_load(true); // tell stb_image.h to flip loaded texture's on the y-axis.
-    unsigned char *data = stbi_load(FileSystem::getPath("textures/tentara.jpg").c_str(), &width, &height, &nrChannels, 0);
-    if (data)
-    {
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-        glGenerateMipmap(GL_TEXTURE_2D);
-    }
-    else
-    {
-        std::cout << "Failed to load texture" << std::endl;
-    }
-    stbi_image_free(data);
+    unsigned int *texture;
+    glGenTextures(3, texture);
+    char filenames[5][30] = {
+            "textures/tentara.jpg",
+            "textures/glass.jpg",
+            "textures/rubber.jpg"
+    };
 
-    // texture 2
-    // ---------
-    glGenTextures(1, &texture2);
-    glBindTexture(GL_TEXTURE_2D, texture2);
-    // set the texture wrapping parameters
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    // set texture filtering parameters
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    // load image, create texture and generate mipmaps
-    stbi_set_flip_vertically_on_load(true); // tell stb_image.h to flip loaded texture's on the y-axis.
-    unsigned char *data_glass = stbi_load(FileSystem::getPath("textures/glass.jpg").c_str(), &width, &height, &nrChannels, 0);
-    if (data_glass)
-    {
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data_glass);
-        glGenerateMipmap(GL_TEXTURE_2D);
-    }
-    else
-    {
-        std::cout << "Failed to load texture" << std::endl;
-    }
-    stbi_image_free(data_glass);
+    for (int j = 0; j < 3; ++j) {
+        glBindTexture(GL_TEXTURE_2D, texture[j]);
 
-    // texture 3
-    // ---------
-    glGenTextures(1, &texture3);
-    glBindTexture(GL_TEXTURE_2D, texture3);
-    // set the texture wrapping parameters
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    // set texture filtering parameters
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    // load image, create texture and generate mipmaps
-    stbi_set_flip_vertically_on_load(true); // tell stb_image.h to flip loaded texture's on the y-axis.
-    unsigned char *data_rubber = stbi_load(FileSystem::getPath("textures/rubber.jpg").c_str(), &width, &height, &nrChannels, 0);
-    if (data_rubber)
-    {
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data_rubber);
-        glGenerateMipmap(GL_TEXTURE_2D);
-    }
-    else
-    {
-        std::cout << "Failed to load texture" << std::endl;
-    }
-    stbi_image_free(data_rubber);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-//    // texture 2
-//    // ---------
-//    glGenTextures(1, &texture2);
-//    glBindTexture(GL_TEXTURE_2D, texture2);
-//    // set the texture wrapping parameters
-//    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-//    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-//    // set texture filtering parameters
-//    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-//    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-//    // load image, create texture and generate mipmaps
-//    data = stbi_load(FileSystem::getPath("textures/Kopassus.png").c_str(), &width, &height, &nrChannels, 0);
-//    if (data)
-//    {
-//        // note that the awesomeface.png has transparency and thus an alpha channel, so make sure to tell OpenGL the data type is of GL_RGBA
-//        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-//        glGenerateMipmap(GL_TEXTURE_2D);
-//    }
-//    else
-//    {
-//        std::cout << "Failed to load" << std::endl;
-//    }
-//    stbi_image_free(data);
+        int width, height, nrChannels;
+
+        unsigned char *data = stbi_load(filenames[j], &width, &height, &nrChannels, 0);
+        if (data)
+        {
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+            glGenerateMipmap(GL_TEXTURE_2D);
+        }
+        else
+        {
+            std::cout << "Failed to load texture" << std::endl;
+        }
+        stbi_image_free(data);
+    }
+
 
     // tell opengl for each sampler to which texture unit it belongs to (only has to be done once)
     // -------------------------------------------------------------------------------------------
     ourShader.use();
-    ourShader.setInt("texture1", 0);
-    ourShader.setInt("texture2", 1);
-    ourShader.setInt("texture3", 2);
+    ourShader.setInt("texture", 0);
 
 
     // render loop
@@ -383,6 +299,11 @@ int main()
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+        // bind textures on corresponding texture units
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, texture[0]);
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, texture[1]);
 
         // activate shader
         ourShader.use();
@@ -399,21 +320,6 @@ int main()
         glBindVertexArray(VAO);
         for (unsigned int i = 0; i < scaler.size(); i++)
         {
-            if (cubeTexture[i] == 1) {
-                // bind textures on corresponding texture units
-                glActiveTexture(GL_TEXTURE0);
-                glBindTexture(GL_TEXTURE_2D, texture1);
-            }
-            else if (cubeTexture[i] == 2) {
-                // bind textures on corresponding texture units
-                glActiveTexture(GL_TEXTURE0);
-                glBindTexture(GL_TEXTURE_2D, texture2);
-            }
-            else if (cubeTexture[i] == 3) {
-                // bind textures on corresponding texture units
-                glActiveTexture(GL_TEXTURE0);
-                glBindTexture(GL_TEXTURE_2D, texture3);
-            }
             // calculate the model matrix for each object and pass it to shader before drawing
             glm::mat4 model = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
             model = glm::translate(model, cubePositions[i]);
@@ -454,7 +360,7 @@ void processInput(GLFWwindow *window)
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
 
-    float cameraSpeed = 10.0 * deltaTime;
+    float cameraSpeed = 2.5 * deltaTime;
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
         cameraPos += cameraSpeed * cameraFront;
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)

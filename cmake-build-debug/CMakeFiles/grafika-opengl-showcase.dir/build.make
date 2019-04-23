@@ -57,18 +57,18 @@ include CMakeFiles/grafika-opengl-showcase.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/grafika-opengl-showcase.dir/flags.make
 
-CMakeFiles/grafika-opengl-showcase.dir/main.cpp.o: CMakeFiles/grafika-opengl-showcase.dir/flags.make
-CMakeFiles/grafika-opengl-showcase.dir/main.cpp.o: ../main.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/hagairaja/Documents/GrafKom/grafika-opengl-showcase/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/grafika-opengl-showcase.dir/main.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/grafika-opengl-showcase.dir/main.cpp.o -c /home/hagairaja/Documents/GrafKom/grafika-opengl-showcase/main.cpp
+CMakeFiles/grafika-opengl-showcase.dir/lightning_sample.cpp.o: CMakeFiles/grafika-opengl-showcase.dir/flags.make
+CMakeFiles/grafika-opengl-showcase.dir/lightning_sample.cpp.o: ../lightning_sample.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/hagairaja/Documents/GrafKom/grafika-opengl-showcase/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/grafika-opengl-showcase.dir/lightning_sample.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/grafika-opengl-showcase.dir/lightning_sample.cpp.o -c /home/hagairaja/Documents/GrafKom/grafika-opengl-showcase/lightning_sample.cpp
 
-CMakeFiles/grafika-opengl-showcase.dir/main.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/grafika-opengl-showcase.dir/main.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/hagairaja/Documents/GrafKom/grafika-opengl-showcase/main.cpp > CMakeFiles/grafika-opengl-showcase.dir/main.cpp.i
+CMakeFiles/grafika-opengl-showcase.dir/lightning_sample.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/grafika-opengl-showcase.dir/lightning_sample.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/hagairaja/Documents/GrafKom/grafika-opengl-showcase/lightning_sample.cpp > CMakeFiles/grafika-opengl-showcase.dir/lightning_sample.cpp.i
 
-CMakeFiles/grafika-opengl-showcase.dir/main.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/grafika-opengl-showcase.dir/main.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/hagairaja/Documents/GrafKom/grafika-opengl-showcase/main.cpp -o CMakeFiles/grafika-opengl-showcase.dir/main.cpp.s
+CMakeFiles/grafika-opengl-showcase.dir/lightning_sample.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/grafika-opengl-showcase.dir/lightning_sample.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/hagairaja/Documents/GrafKom/grafika-opengl-showcase/lightning_sample.cpp -o CMakeFiles/grafika-opengl-showcase.dir/lightning_sample.cpp.s
 
 CMakeFiles/grafika-opengl-showcase.dir/glad.c.o: CMakeFiles/grafika-opengl-showcase.dir/flags.make
 CMakeFiles/grafika-opengl-showcase.dir/glad.c.o: ../glad.c
@@ -85,13 +85,13 @@ CMakeFiles/grafika-opengl-showcase.dir/glad.c.s: cmake_force
 
 # Object files for target grafika-opengl-showcase
 grafika__opengl__showcase_OBJECTS = \
-"CMakeFiles/grafika-opengl-showcase.dir/main.cpp.o" \
+"CMakeFiles/grafika-opengl-showcase.dir/lightning_sample.cpp.o" \
 "CMakeFiles/grafika-opengl-showcase.dir/glad.c.o"
 
 # External object files for target grafika-opengl-showcase
 grafika__opengl__showcase_EXTERNAL_OBJECTS =
 
-grafika-opengl-showcase: CMakeFiles/grafika-opengl-showcase.dir/main.cpp.o
+grafika-opengl-showcase: CMakeFiles/grafika-opengl-showcase.dir/lightning_sample.cpp.o
 grafika-opengl-showcase: CMakeFiles/grafika-opengl-showcase.dir/glad.c.o
 grafika-opengl-showcase: CMakeFiles/grafika-opengl-showcase.dir/build.make
 grafika-opengl-showcase: CMakeFiles/grafika-opengl-showcase.dir/link.txt
