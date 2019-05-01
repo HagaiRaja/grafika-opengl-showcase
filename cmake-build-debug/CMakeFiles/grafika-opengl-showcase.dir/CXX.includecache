@@ -6,7 +6,7 @@
 
 #IncludeRegexTransform: 
 
-/home/hagairaja/Documents/GrafKom/grafika-opengl-showcase/learnopengl/camera.h
+/home/hagairaja/Documents/GrafKom/grafika-opengl-showcase/helper/camera.h
 glad/glad.h
 -
 glm/glm.hpp
@@ -16,17 +16,17 @@ glm/gtc/matrix_transform.hpp
 vector
 -
 
-/home/hagairaja/Documents/GrafKom/grafika-opengl-showcase/learnopengl/filesystem.h
+/home/hagairaja/Documents/GrafKom/grafika-opengl-showcase/helper/filesystem.h
 string
 -
 cstdlib
 -
 root_directory.h
-/home/hagairaja/Documents/GrafKom/grafika-opengl-showcase/learnopengl/root_directory.h
+/home/hagairaja/Documents/GrafKom/grafika-opengl-showcase/helper/root_directory.h
 
-/home/hagairaja/Documents/GrafKom/grafika-opengl-showcase/learnopengl/root_directory.h
+/home/hagairaja/Documents/GrafKom/grafika-opengl-showcase/helper/root_directory.h
 
-/home/hagairaja/Documents/GrafKom/grafika-opengl-showcase/learnopengl/shader_m.h
+/home/hagairaja/Documents/GrafKom/grafika-opengl-showcase/helper/shader.h
 glad/glad.h
 -
 glm/glm.hpp
@@ -40,7 +40,7 @@ sstream
 iostream
 -
 
-/home/hagairaja/Documents/GrafKom/grafika-opengl-showcase/lightning_sample.cpp
+/home/hagairaja/Documents/GrafKom/grafika-opengl-showcase/main.cpp
 glad/glad.h
 -
 GLFW/glfw3.h
@@ -53,12 +53,12 @@ glm/gtc/matrix_transform.hpp
 -
 glm/gtc/type_ptr.hpp
 -
-learnopengl/shader_m.h
-/home/hagairaja/Documents/GrafKom/grafika-opengl-showcase/learnopengl/shader_m.h
-learnopengl/camera.h
-/home/hagairaja/Documents/GrafKom/grafika-opengl-showcase/learnopengl/camera.h
-learnopengl/filesystem.h
-/home/hagairaja/Documents/GrafKom/grafika-opengl-showcase/learnopengl/filesystem.h
+helper/shader.h
+/home/hagairaja/Documents/GrafKom/grafika-opengl-showcase/helper/shader.h
+helper/camera.h
+/home/hagairaja/Documents/GrafKom/grafika-opengl-showcase/helper/camera.h
+helper/filesystem.h
+/home/hagairaja/Documents/GrafKom/grafika-opengl-showcase/helper/filesystem.h
 stb_image.h
 /home/hagairaja/Documents/GrafKom/grafika-opengl-showcase/stb_image.h
 iostream

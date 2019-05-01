@@ -3,22 +3,56 @@
 #include <stb_image.h>
 
 #define STB_IMAGE_IMPLEMENTATION
+
+#define WORLD_TOP 30.0
+#define WORLD_BOTTOM -1.0
+#define WORLD_LEFT -5.0
+#define WORLD_RIGHT 15.0
+#define WORLD_FRONT -15.0
+#define WORLD_BACK 25.0
+
+#define NUMBER_OF_RAIN_PARTICLE 1000
+#define PARTICLE_MIN_SPEED 0.1
+#define PARTICLE_MAX_SPEED 0.5
+#define PARTICLE_SPEED 0.3
+
+#define NUMBER_OF_SMOKE_PARTICLE 200
+#define START_X 5
+#define START_Y 0.5
+#define START_Z 18
+#define SMOKE_MAX_LIFETIME 50
+#define LIFESPAN_PER_CYCLE 1
+
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include "learnopengl/shader_m.h"
-#include "learnopengl/filesystem.h"
+#include "helper/shader.h"
+#include "helper/camera.h"
+#include "helper/filesystem.h"
 #include "stb_image.h"
 
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <cstdlib>
+#include <ctime>
 using namespace std;
 
 typedef struct{
     float x, y, z;
 } point;
+
+typedef struct{
+    float x, y, z;
+    float speed; // on y axis
+} rain;
+
+typedef struct{
+    float x, y, z;
+    float halftime, decaytime; // on 0-1s move on hor and ver on 1-2s move on ver
+    float x_speed, y_speed, z_speed; // on y axis
+} smoke;
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
@@ -30,23 +64,27 @@ const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
 
 // camera
-glm::vec3 cameraPos   = glm::vec3(0.0f, 0.0f, 3.0f);
-glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
-glm::vec3 cameraUp    = glm::vec3(0.0f, 1.0f, 0.0f);
-
+Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
+float lastX = SCR_WIDTH / 2.0f;
+float lastY = SCR_HEIGHT / 2.0f;
 bool firstMouse = true;
-float yaw   = -90.0f;	// yaw is initialized to -90.0 degrees since a yaw of 0.0 results in a direction vector pointing to the right so we initially rotate a bit to the left.
-float pitch =  0.0f;
-float lastX =  800.0f / 2.0;
-float lastY =  600.0 / 2.0;
-float fov   =  45.0f;
 
 // timing
-float deltaTime = 0.0f;	// time between current frame and last frame
+float deltaTime = 0.0f;
 float lastFrame = 0.0f;
+
+// lighting
+glm::vec3 lightPos(5.0f, 5.0f, 20.0f);
+
+//glm::vec3 lightPos(-5.0f, -1.3f, -15.0f);
+
+
+// ground
+glm::vec3 groundPos(5.0f, -1.3f, 5.0f);
 
 int main()
 {
+    srand (static_cast <unsigned> (time(0)));
     // glfw: initialize and configure
     // ------------------------------
     glfwInit();
@@ -89,9 +127,11 @@ int main()
 
     // build and compile our shader zprogram
     // ------------------------------------
-    Shader ourShader("7.1.camera.vs", "7.1.camera.fs");
-    Shader lightingShader("2.2.basic_lighting.vs", "2.2.basic_lighting.fs");
-    Shader lampShader("2.2.lamp.vs", "2.2.lamp.fs");
+    Shader lightingShader("lighting.vs", "lighting.fs");
+    Shader lampShader("lamp.vs", "lamp.fs");
+    Shader groundShader("ground.vs", "ground.fs");
+    Shader particleShader("particle.vs", "particle.fs");
+    Shader waterShader("water.vs", "water.fs");
 
     // set up vertex data (and buffer(s)) and configure vertex attributes
     // ------------------------------------------------------------------
@@ -131,12 +171,22 @@ int main()
             -0.5f, -0.5f,  1.0f,  0.0f, 0.0f, 0.0f, -1.0f,  0.0f,
             -0.5f, -0.5f, -1.0f,  0.0f, 1.0f, 0.0f, -1.0f,  0.0f,
 
-            -0.5f,  0.5f, -1.0f,  0.0f, 1.0f,v
-            0.5f,  0.5f, -1.0f,  1.0f, 1.0f,
-            0.5f,  0.5f,  1.0f,  1.0f, 0.0f,
-            0.5f,  0.5f,  1.0f,  1.0f, 0.0f,
-            -0.5f,  0.5f,  1.0f,  0.0f, 0.0f,
-            -0.5f,  0.5f, -1.0f,  0.0f, 1.0f
+            -0.5f,  0.5f, -1.0f,  0.0f, 1.0f, 0.0f,  1.0f,  0.0f,
+            0.5f,  0.5f, -1.0f,  1.0f, 1.0f, 0.0f,  1.0f,  0.0f,
+            0.5f,  0.5f,  1.0f,  1.0f, 0.0f, 0.0f,  1.0f,  0.0f,
+            0.5f,  0.5f,  1.0f,  1.0f, 0.0f, 0.0f,  1.0f,  0.0f,
+            -0.5f,  0.5f,  1.0f,  0.0f, 0.0f, 0.0f,  1.0f,  0.0f,
+            -0.5f,  0.5f, -1.0f,  0.0f, 1.0f,  0.0f,  1.0f,  0.0f
+    };
+
+    float ground[] = { // consist of two triangle
+            10.0f, 10.0f, 10.0f,
+            -10.0f, 10.0f, 10.0f,
+            -10.0f, -10.0f, 10.0f,
+
+            -10.0f, 10.0f, 10.0f,
+            -10.0f, -10.0f, 10.0f,
+            10.0f, -10.0f, 10.0f
     };
 
     // --------------------------------------------------------------------------------------------------
@@ -235,25 +285,70 @@ int main()
 
     // --------------------------------------------------------------------------------------------------
 
-    unsigned int VBO, VAO;
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
+    // generating rain
+    rain rainParticle[NUMBER_OF_RAIN_PARTICLE];
 
-    glBindVertexArray(VAO);
+    for (int i = 0; i < NUMBER_OF_RAIN_PARTICLE; ++i) {
+        rainParticle[i].x = static_cast<float>(WORLD_LEFT + static_cast <float> (rand()) / ( static_cast <float> (RAND_MAX / (WORLD_RIGHT - WORLD_LEFT))));
+        rainParticle[i].z = static_cast<float>(WORLD_FRONT + static_cast <float> (rand()) / ( static_cast <float> (RAND_MAX / (WORLD_BACK - WORLD_FRONT))));
+        rainParticle[i].y = WORLD_TOP;
+        rainParticle[i].speed = static_cast<float>(PARTICLE_MIN_SPEED + static_cast <float> (rand()) / ( static_cast <float> (RAND_MAX / (PARTICLE_MAX_SPEED - PARTICLE_MIN_SPEED))));
+        cout << rainParticle[i].x << " " << rainParticle[i].y << " " << rainParticle[i].z << " " << rainParticle[i].speed << endl;
+    }
+
+    // generating smoke
+    smoke smokeParticle[NUMBER_OF_SMOKE_PARTICLE];
+
+    for (int j = 0; j < NUMBER_OF_SMOKE_PARTICLE; ++j) {
+        smokeParticle[j].x = START_X;
+        smokeParticle[j].y = START_Y;
+        smokeParticle[j].z = START_Z;
+        smokeParticle[j].decaytime = rand()%(SMOKE_MAX_LIFETIME + 1);
+        smokeParticle[j].halftime = smokeParticle[j].decaytime / 2;
+        smokeParticle[j].x_speed = static_cast<float>(-PARTICLE_SPEED + static_cast <float> (rand()) / ( static_cast <float> (RAND_MAX / (PARTICLE_SPEED * 2))));
+        smokeParticle[j].y_speed = static_cast<float>(PARTICLE_MIN_SPEED + static_cast <float> (rand()) / ( static_cast <float> (RAND_MAX / (PARTICLE_MAX_SPEED - PARTICLE_MIN_SPEED))));
+        smokeParticle[j].z_speed = static_cast<float>(PARTICLE_MIN_SPEED + static_cast <float> (rand()) / ( static_cast <float> (RAND_MAX / (PARTICLE_MAX_SPEED - PARTICLE_MIN_SPEED))));
+    }
+
+    // first, configure the cube's VAO (and VBO)
+    unsigned int VBO, cubeVAO;
+    glGenVertexArrays(1, &cubeVAO);
+    glGenBuffers(1, &VBO);
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
+    glBindVertexArray(cubeVAO);
+
     // position attribute
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
     // texture coord attribute
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
-    // color attribute
-//    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(5 * sizeof(float)));
-//    glEnableVertexAttribArray(2);
+    // normal coord attribute
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(5 * sizeof(float)));
+    glEnableVertexAttribArray(1);
 
+
+    // second, configure the light's VAO (VBO stays the same; the vertices are the same for the light object which is also a 3D cube)
+    unsigned int lightVAO;
+    glGenVertexArrays(1, &lightVAO);
+    glBindVertexArray(lightVAO);
+
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    // note that we update the lamp's position attribute's stride to reflect the updated buffer data
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+
+    unsigned int groundVAO;
+    glGenVertexArrays(1, &groundVAO);
+    glBindVertexArray(groundVAO);
+
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    // note that we update the lamp's position attribute's stride to reflect the updated buffer data
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(2);
 
     // load and create a texture
     // -------------------------
@@ -331,37 +426,12 @@ int main()
     }
     stbi_image_free(data_rubber);
 
-
-//    // texture 2
-//    // ---------
-//    glGenTextures(1, &texture2);
-//    glBindTexture(GL_TEXTURE_2D, texture2);
-//    // set the texture wrapping parameters
-//    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-//    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-//    // set texture filtering parameters
-//    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-//    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-//    // load image, create texture and generate mipmaps
-//    data = stbi_load(FileSystem::getPath("textures/Kopassus.png").c_str(), &width, &height, &nrChannels, 0);
-//    if (data)
-//    {
-//        // note that the awesomeface.png has transparency and thus an alpha channel, so make sure to tell OpenGL the data type is of GL_RGBA
-//        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-//        glGenerateMipmap(GL_TEXTURE_2D);
-//    }
-//    else
-//    {
-//        std::cout << "Failed to load" << std::endl;
-//    }
-//    stbi_image_free(data);
-
     // tell opengl for each sampler to which texture unit it belongs to (only has to be done once)
     // -------------------------------------------------------------------------------------------
-    ourShader.use();
-    ourShader.setInt("texture1", 0);
-    ourShader.setInt("texture2", 1);
-    ourShader.setInt("texture3", 2);
+    lightingShader.use();
+    lightingShader.setInt("texture1", 0);
+    lightingShader.setInt("texture2", 1);
+    lightingShader.setInt("texture3", 2);
 
 
     // render loop
@@ -380,23 +450,130 @@ int main()
 
         // render
         // ------
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+        // be sure to activate shader when setting uniforms/drawing objects
+        particleShader.use();
+        particleShader.setVec3("objectColor", 0.0f, 0.0f, 1.0f);
+        particleShader.setVec3("lightColor", 1.0f, 1.0f, 1.0f);
+        particleShader.setVec3("lightPos", lightPos);
+        particleShader.setVec3("viewPos", camera.Position);
 
-        // activate shader
-        ourShader.use();
+        // view/projection transformations
+        glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+        glm::mat4 view = camera.GetViewMatrix();
+        particleShader.setMat4("projection", projection);
+        particleShader.setMat4("view", view);
 
-        // pass projection matrix to shader (note that in this case it could change every frame)
-        glm::mat4 projection = glm::perspective(glm::radians(fov), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-        ourShader.setMat4("projection", projection);
+        // world transformation
+        glm::mat4 model = glm::mat4(1.0f);
+        particleShader.setMat4("model", model);
 
-        // camera/view transformation
-        glm::mat4 view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
-        ourShader.setMat4("view", view);
+        // drawing smoke
+        // smoke color
+        glm::mat4 colours = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
+        colours = glm::scale(colours, glm::vec3(0.6f)); // colours are grey
+        for (int j = 0; j < NUMBER_OF_SMOKE_PARTICLE; ++j) {
+            // update position
+            smokeParticle[j].decaytime -= LIFESPAN_PER_CYCLE;
+            if (smokeParticle[j].decaytime < 0) {
+                smokeParticle[j].x = START_X;
+                smokeParticle[j].y = START_Y;
+                smokeParticle[j].z = START_Z;
+                smokeParticle[j].decaytime = rand()%(SMOKE_MAX_LIFETIME + 1);
+                smokeParticle[j].halftime = smokeParticle[j].decaytime / 2;
+                smokeParticle[j].x_speed = static_cast<float>(-PARTICLE_SPEED + static_cast <float> (rand()) / ( static_cast <float> (RAND_MAX / (PARTICLE_SPEED * 2))));
+                smokeParticle[j].y_speed = static_cast<float>(PARTICLE_MIN_SPEED + static_cast <float> (rand()) / ( static_cast <float> (RAND_MAX / (PARTICLE_MAX_SPEED - PARTICLE_MIN_SPEED))));
+                smokeParticle[j].z_speed = static_cast<float>(PARTICLE_MIN_SPEED + static_cast <float> (rand()) / ( static_cast <float> (RAND_MAX / (PARTICLE_MAX_SPEED - PARTICLE_MIN_SPEED))));
+            }
+            else if (smokeParticle[j].decaytime < smokeParticle[j].halftime) {
+                smokeParticle[j].x += smokeParticle[j].x_speed;
+                smokeParticle[j].y += smokeParticle[j].y_speed;
+                smokeParticle[j].z += smokeParticle[j].z_speed;
+            }
+            else {
+                smokeParticle[j].x += smokeParticle[j].x_speed;
+                smokeParticle[j].z += smokeParticle[j].z_speed;
+            }
 
+            // calculate the model matrix for each object and pass it to shader before drawing
+            glm::mat4 model = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
+            model = glm::translate(model, glm::vec3(smokeParticle[j].x, smokeParticle[j].y, smokeParticle[j].z));
+            float angle = 0;
+            model = glm::scale(model, glm::vec3(0.05f, 0.05f, 0.05f));
+            model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+            particleShader.setMat4("model", model);
+
+            particleShader.setMat4("aColor", colours);
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+        }
+
+        // be sure to activate shader when setting uniforms/drawing objects
+        waterShader.use();
+        waterShader.setVec3("objectColor", 0.0f, 0.0f, 1.0f);
+        waterShader.setVec3("lightColor", 1.0f, 1.0f, 1.0f);
+        waterShader.setVec3("lightPos", lightPos);
+        waterShader.setVec3("viewPos", camera.Position);
+
+        // view/projection transformations
+        projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+        view = camera.GetViewMatrix();
+        waterShader.setMat4("projection", projection);
+        waterShader.setMat4("view", view);
+
+        // world transformation
+        model = glm::mat4(1.0f);
+        waterShader.setMat4("model", model);
+
+        // drawing rain
+        // rain color
+        colours = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
+        colours = glm::scale(colours, glm::vec3(0.0f, 1.0f, 1.0f)); // colours are blue light
+        for (int i = 0; i < NUMBER_OF_RAIN_PARTICLE; ++i) {
+            // update rain
+            rainParticle[i].y -= rainParticle[i].speed;
+            if (rainParticle[i].y < WORLD_BOTTOM) {
+                rainParticle[i].x = static_cast<float>(WORLD_LEFT + static_cast <float> (rand()) / ( static_cast <float> (RAND_MAX / (WORLD_RIGHT - WORLD_LEFT))));
+                rainParticle[i].z = static_cast<float>(WORLD_FRONT + static_cast <float> (rand()) / ( static_cast <float> (RAND_MAX / (WORLD_BACK - WORLD_FRONT))));
+                rainParticle[i].y = WORLD_TOP;
+                rainParticle[i].speed = static_cast<float>(PARTICLE_MIN_SPEED + static_cast <float> (rand()) / ( static_cast <float> (RAND_MAX / (PARTICLE_MAX_SPEED - PARTICLE_MIN_SPEED))));
+                cout << "regenerate particle " << i << " : " << rainParticle[i].x << " " << rainParticle[i].y << " " << rainParticle[i].z << " " << rainParticle[i].speed << endl;
+            }
+
+            // calculate the model matrix for each object and pass it to shader before drawing
+            glm::mat4 model = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
+            model = glm::translate(model, glm::vec3(rainParticle[i].x, rainParticle[i].y, rainParticle[i].z));
+            float angle = 0.0f * i;
+            model = glm::scale(model, glm::vec3(0.05f, 0.2f, 0.05f));
+            model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+            waterShader.setMat4("model", model);
+
+            waterShader.setMat4("aColor", colours);
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+        }
+
+
+        // be sure to activate shader when setting uniforms/drawing objects
+        lightingShader.use();
+        lightingShader.setVec3("objectColor", 0.0f, 0.0f, 1.0f);
+        lightingShader.setVec3("lightColor", 1.0f, 1.0f, 1.0f);
+        lightingShader.setVec3("lightPos", lightPos);
+        lightingShader.setVec3("viewPos", camera.Position);
+
+        // view/projection transformations
+        projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+        view = camera.GetViewMatrix();
+        lightingShader.setMat4("projection", projection);
+        lightingShader.setMat4("view", view);
+
+        // world transformation
+        model = glm::mat4(1.0f);
+        lightingShader.setMat4("model", model);
+
+        // render the cube
         // render boxes
-        glBindVertexArray(VAO);
+        glBindVertexArray(cubeVAO);
         for (unsigned int i = 0; i < scaler.size(); i++)
         {
             if (cubeTexture[i] == 1) {
@@ -420,25 +597,55 @@ int main()
             float angle = 0.0f * i;
             model = glm::scale(model, cubeScaler[i]);
             model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
-            ourShader.setMat4("model", model);
+            lightingShader.setMat4("model", model);
 
             // box color
             glm::mat4 colours = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
             colours = glm::scale(colours, cubeColor[i]);
-            ourShader.setMat4("aColor", colours);
+            lightingShader.setMat4("aColor", colours);
 
             glDrawArrays(GL_TRIANGLES, 0, 36);
         }
 
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, texture1);
+
+
+        // also draw the lamp object
+        lampShader.use();
+        lampShader.setMat4("projection", projection);
+        lampShader.setMat4("view", view);
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, lightPos);
+        model = glm::scale(model, glm::vec3(0.2f)); // a smaller cube
+        lampShader.setMat4("model", model);
+
+        glBindVertexArray(lightVAO);
+        glDrawArrays(GL_TRIANGLES, 0, 36);
+
+        // draw ground
+        groundShader.use();
+        groundShader.setMat4("projection", projection);
+        groundShader.setMat4("view", view);
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, groundPos);
+        model = glm::scale(model, glm::vec3(20.0f, 0.1f, 20.0f)); // a smaller cube
+        groundShader.setMat4("model", model);
+
+        glBindVertexArray(lightVAO);
+        glDrawArrays(GL_TRIANGLES, 0, 36);
+
+
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
         glfwSwapBuffers(window);
-        glfwPollEvents();
+        glfwWaitEvents();
     }
 
     // optional: de-allocate all resources once they've outlived their purpose:
     // ------------------------------------------------------------------------
-    glDeleteVertexArrays(1, &VAO);
+    glDeleteVertexArrays(1, &cubeVAO);
+    glDeleteVertexArrays(1, &lightVAO);
     glDeleteBuffers(1, &VBO);
 
     // glfw: terminate, clearing all previously allocated GLFW resources.
@@ -454,15 +661,14 @@ void processInput(GLFWwindow *window)
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
 
-    float cameraSpeed = 10.0 * deltaTime;
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-        cameraPos += cameraSpeed * cameraFront;
+        camera.ProcessKeyboard(FORWARD, deltaTime);
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-        cameraPos -= cameraSpeed * cameraFront;
+        camera.ProcessKeyboard(BACKWARD, deltaTime);
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-        cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+        camera.ProcessKeyboard(LEFT, deltaTime);
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-        cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+        camera.ProcessKeyboard(RIGHT, deltaTime);
 }
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
@@ -473,6 +679,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
     // height will be significantly larger than specified on retina displays.
     glViewport(0, 0, width, height);
 }
+
 
 // glfw: whenever the mouse moves, this callback is called
 // -------------------------------------------------------
@@ -487,37 +694,17 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 
     float xoffset = xpos - lastX;
     float yoffset = lastY - ypos; // reversed since y-coordinates go from bottom to top
+
     lastX = xpos;
     lastY = ypos;
 
-    float sensitivity = 0.1f; // change this value to your liking
-    xoffset *= sensitivity;
-    yoffset *= sensitivity;
-
-    yaw += xoffset;
-    pitch += yoffset;
-
-    // make sure that when pitch is out of bounds, screen doesn't get flipped
-    if (pitch > 89.0f)
-        pitch = 89.0f;
-    if (pitch < -89.0f)
-        pitch = -89.0f;
-
-    glm::vec3 front;
-    front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
-    front.y = sin(glm::radians(pitch));
-    front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
-    cameraFront = glm::normalize(front);
+    camera.ProcessMouseMovement(xoffset, yoffset);
 }
 
 // glfw: whenever the mouse scroll wheel scrolls, this callback is called
 // ----------------------------------------------------------------------
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
-    if (fov >= 1.0f && fov <= 45.0f)
-        fov -= yoffset;
-    if (fov <= 1.0f)
-        fov = 1.0f;
-    if (fov >= 45.0f)
-        fov = 45.0f;
+    camera.ProcessMouseScroll(yoffset);
 }
+

@@ -3,9 +3,9 @@
 
 CMakeFiles/grafika-opengl-showcase.dir/glad.c.o
  /home/hagairaja/Documents/GrafKom/grafika-opengl-showcase/glad.c
-CMakeFiles/grafika-opengl-showcase.dir/lightning_sample.cpp.o
- /home/hagairaja/Documents/GrafKom/grafika-opengl-showcase/learnopengl/camera.h
- /home/hagairaja/Documents/GrafKom/grafika-opengl-showcase/learnopengl/filesystem.h
- /home/hagairaja/Documents/GrafKom/grafika-opengl-showcase/learnopengl/root_directory.h
- /home/hagairaja/Documents/GrafKom/grafika-opengl-showcase/learnopengl/shader_m.h
- /home/hagairaja/Documents/GrafKom/grafika-opengl-showcase/lightning_sample.cpp
+CMakeFiles/grafika-opengl-showcase.dir/main.cpp.o
+ /home/hagairaja/Documents/GrafKom/grafika-opengl-showcase/helper/camera.h
+ /home/hagairaja/Documents/GrafKom/grafika-opengl-showcase/helper/filesystem.h
+ /home/hagairaja/Documents/GrafKom/grafika-opengl-showcase/helper/root_directory.h
+ /home/hagairaja/Documents/GrafKom/grafika-opengl-showcase/helper/shader.h
+ /home/hagairaja/Documents/GrafKom/grafika-opengl-showcase/main.cpp

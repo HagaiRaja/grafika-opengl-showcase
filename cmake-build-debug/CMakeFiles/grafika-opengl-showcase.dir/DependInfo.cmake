@@ -13,7 +13,7 @@ set(CMAKE_C_COMPILER_ID "GNU")
 set(CMAKE_C_TARGET_INCLUDE_PATH
   )
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/hagairaja/Documents/GrafKom/grafika-opengl-showcase/lightning_sample.cpp" "/home/hagairaja/Documents/GrafKom/grafika-opengl-showcase/cmake-build-debug/CMakeFiles/grafika-opengl-showcase.dir/lightning_sample.cpp.o"
+  "/home/hagairaja/Documents/GrafKom/grafika-opengl-showcase/main.cpp" "/home/hagairaja/Documents/GrafKom/grafika-opengl-showcase/cmake-build-debug/CMakeFiles/grafika-opengl-showcase.dir/main.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 
